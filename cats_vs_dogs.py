@@ -104,13 +104,17 @@ x_train,x_test,train_label,test_label=train_test_split(x,y,test_size=0.33,random
 #####################
 
 from keras.models import Sequential
-classifier= Sequential()
-classifier.add(Convolution2D(32,kernel_size=3,input_shape=(224,224,3),activation ='relu'))
-classifier.add(MaxPooling2D(pool_size = (2,2)))
-classifier.add(Flatten())
-classifier.add(Dense(128,activation='relu'))
-classifier.add(Dense(1,activation='sigmoid'))
-
+model = Sequential()
+model.add(Convolution2D(64,kernel_size=3,input_shape=(224,224,3),activation ='relu'))
+model.add(MaxPooling2D(pool_size=(2,2)))
+model.add(Convolution2D(128,kernel_size=3, activation='relu'))
+model.add(MaxPooling2D(pool_size=(2,2)))
+model.add(Convolution2D(256,kernel_size=3, activation='relu'))
+model.add(MaxPooling2D(pool_size=(2,2)))
+model.add(Flatten())
+model.add(Dense(512, activation='relu'))
+model.add(Dropout(0.5))
+model.add(Dense(2, activation='sigmoid'))
 classifier.compile('adam',loss='binary_crossentropy',metrics=['accuracy'])
 
 
