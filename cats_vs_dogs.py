@@ -1,3 +1,8 @@
+#DataSet can be found on https://www.kaggle.com/datasets/salader/dogs-vs-cats
+
+####################
+#importing pakages
+####################
 
 import pandas as pd
 from keras.layers import Convolution2D
@@ -13,6 +18,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import LabelEncoder
 
+####################
+#viewdata
+####################
 
 image=Image.open('D:/workspace/ML/data_cat_dog/cat.170.jpg')
 image=np.array(image)
@@ -20,10 +28,11 @@ image=np.array(image)
 plt.imshow(image)
 plt.colorbar()
 
-
 image.shape
 
-
+############################################################
+# function to read images from a specifique directory
+############################################################
 
 def get_data_set(filepath):
     imgs=[]
@@ -36,10 +45,16 @@ def get_data_set(filepath):
     return np.asarray(imgs),labels
 
 
+####################
+#importing data
+####################
+
 filepath = 'D:/workspace/ML/data_cat_dog/'
 imgs,labels= get_data_set(filepath)  
 
-
+####################
+#Data augmentation
+####################
 
 data_augmentation = tf.keras.Sequential([tf.keras.layers.RandomFlip("horizontal_and_vertical"), tf.keras.layers.RandomRotation(0.2)])
 images=[]
@@ -51,6 +66,9 @@ for y in imgs:
 
 images=np.asarray(images)
 
+####################
+#label augmentation
+####################
 
 lab=[]
 for x in labels:
@@ -59,19 +77,31 @@ for x in labels:
 lab=np.reshape(lab,-1)
 
 
+########################################
+#transforming label into Numerique
+#########################################
 
 from sklearn.preprocessing import LabelEncoder
 lab = LabelEncoder().fit_transform(lab)
 
 
+####################
+#shuffling data
+####################
 
 from sklearn.utils import shuffle
 x, y = shuffle(images, lab, random_state=0)
 
+####################
+#test train split
+####################
 
 from sklearn.model_selection import train_test_split
 x_train,x_test,train_label,test_label=train_test_split(x,y,test_size=0.33,random_state=0) 
 
+#####################
+#building CNN model
+#####################
 
 from keras.models import Sequential
 classifier= Sequential()
@@ -88,16 +118,17 @@ classifier.compile('adam',loss='binary_crossentropy',metrics=['accuracy'])
 from tensorflow.keras.utils import plot_model
 plot_model(classifier)
 
-
-
-
 classifier.summary()
 
 
-
+#####################
+#training data
+#####################
 history=classifier.fit(x_train,train_label,batch_size=128,epochs=15,validation_data=(x_test,test_label))
 
-
+###########################
+#ploting accuracy and loss
+###########################
 
 import matplotlib.pyplot as plt
 acc = history.history['accuracy']
@@ -109,8 +140,6 @@ plt.title('Accuracy Graph')
 plt.legend()
 plt.figure()
 
-
-
 loss = history.history['loss']
 val_loss = history.history['val_loss']
 
@@ -120,6 +149,11 @@ plt.title('Loss Graph')
 plt.legend()
 plt.show()
 
+
+
+##########################################
+#building VGG16 model using transfer learning
+##########################################
 
 from tensorflow.keras.applications import VGG16
 from tensorflow.keras.layers import Input
