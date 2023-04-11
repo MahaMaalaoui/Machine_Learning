@@ -22,7 +22,7 @@ from sklearn.preprocessing import LabelEncoder
 #viewdata
 ####################
 
-image=Image.open('D:/workspace/ML/data_cat_dog/cat.170.jpg')
+image=Image.open('/data_cat_dog/cat.170.jpg')
 image=np.array(image)
 
 plt.imshow(image)
@@ -49,7 +49,7 @@ def get_data_set(filepath):
 #importing data
 ####################
 
-filepath = 'D:/workspace/ML/data_cat_dog/'
+filepath = '/data_cat_dog/'
 imgs,labels= get_data_set(filepath)  
 
 ####################
